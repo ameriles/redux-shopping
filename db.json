@@ -1,4 +1,9 @@
 {
+  "users": [{
+      "username": "admin",
+      "password": "admin",
+      "id": 1
+  }],
   "products": [
     {
       "id": 1,

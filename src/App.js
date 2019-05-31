@@ -28,24 +28,14 @@ class App extends React.Component {
     this.state = {
       appTitle: 'React Shopping',
       isDrawerOpen: false,
-      loggedUser: null,
-      cartItems: []
+      loggedUser: null
     }
-  }
-
-  onAddToCart = (product) => () => {
-    const cartItems = [...this.state.cartItems, product]
-    this.setState({ cartItems })
   }
 
   onDrawerToggle = (open) => () => {
     this.setState({
       isDrawerOpen: open
     })
-  }
-
-  onLogged = (loggedUser) => {
-    this.setState({ loggedUser })
   }
 
   onSessionClosed = () => {
@@ -60,20 +50,19 @@ class App extends React.Component {
   }
 
   render () {
-    const { isDrawerOpen, loggedUser, cartItems, appTitle } = this.state
-    const cartItemsCount = cartItems.length
+    const { isDrawerOpen, loggedUser, appTitle } = this.state
     const hasLoggedUser = loggedUser !== null
     return (
       <HashRouter>
         <MuiThemeProvider theme={theme}>
-          <ShopAppBar title={appTitle} cartItemsCount={cartItemsCount}
-            hasLoggedUser={hasLoggedUser} onDrawerToggle={this.onDrawerToggle} />
-          <ShopDrawer open={isDrawerOpen} loggedUser={loggedUser} cartItemsCount={cartItemsCount}
+          <ShopAppBar title={appTitle} onDrawerToggle={this.onDrawerToggle} hasLoggedUser={hasLoggedUser} />
+          <ShopDrawer open={isDrawerOpen} loggedUser={loggedUser}
             onToggle={this.onDrawerToggle} onSessionClosed={this.onSessionClosed} />
-          <Route path='/login' render={(props) => <Login {...props} onLogged={this.onLogged} onSetAppTitle={this.onSetAppTitle} />} />
-          <Route path='/' exact render={(props) => <ProductList {...props} hasLoggedUser={hasLoggedUser} onAddToCart={this.onAddToCart} onSetAppTitle={this.onSetAppTitle} />} />
-          <Route path='/products/:id' render={(props) => <ProductDetails {...props} hasLoggedUser={hasLoggedUser} onAddToCart={this.onAddToCart} onSetAppTitle={this.onSetAppTitle} />} />
-          <Route path='/cart' render={(props) => <Cart {...props} cartItems={cartItems} onSetAppTitle={this.onSetAppTitle} />} />
+
+          <Route path='/login' render={(props) => <Login {...props} onSetAppTitle={this.onSetAppTitle} />} />
+          <Route path='/' exact render={(props) => <ProductList {...props} hasLoggedUser={hasLoggedUser} onSetAppTitle={this.onSetAppTitle} />} />
+          <Route path='/products/:id' render={(props) => <ProductDetails {...props} hasLoggedUser={hasLoggedUser} onSetAppTitle={this.onSetAppTitle} />} />
+          <Route path='/cart' render={(props) => <Cart {...props} onSetAppTitle={this.onSetAppTitle} />} />
         </MuiThemeProvider>
       </HashRouter>
     )

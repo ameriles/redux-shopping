@@ -5,6 +5,8 @@ import { Card, CardContent, CardMedia, CardActions, Button, Typography } from '@
 import { Link } from 'react-router-dom'
 import AddIcon from '@material-ui/icons/Add'
 import { withStyles } from '@material-ui/core/styles'
+import { addToCart } from '../../redux/modules/cart'
+import { connect } from 'react-redux'
 
 const styles = theme => ({
   card: {
@@ -35,7 +37,7 @@ const styles = theme => ({
   }
 })
 
-const ProductItem = ({ id, imageUrl, name, price, freeShipping, onAddToCart, hasLoggedUser, classes }) => (
+const ProductItem = ({ id, imageUrl, name, price, freeShipping, hasLoggedUser, addToCart, classes }) => (
   <Card>
     <div className={classes.card}>
       <CardMedia className={classes.media}
@@ -52,7 +54,7 @@ const ProductItem = ({ id, imageUrl, name, price, freeShipping, onAddToCart, has
     {
       hasLoggedUser
         ? <CardActions className={classes.cardActions}>
-          <Button size='small' color='primary' onClick={onAddToCart}>
+          <Button size='small' color='primary' onClick={() => addToCart({ id, imageUrl, name, price, freeShipping })}>
             Add to cart
             <AddIcon />
           </Button>
@@ -69,9 +71,13 @@ ProductItem.propTypes = {
   name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   freeShipping: PropTypes.bool,
-  onAddToCart: PropTypes.func.isRequired,
+  addToCart: PropTypes.func.isRequired,
   hasLoggedUser: PropTypes.bool.isRequired,
   classes: PropTypes.object
 }
 
-export default withStyles(styles)(ProductItem)
+const mapDispatchToProps = {
+  addToCart
+}
+
+export default connect(null, mapDispatchToProps)(withStyles(styles)(ProductItem))

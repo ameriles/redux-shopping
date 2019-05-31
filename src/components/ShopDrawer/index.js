@@ -5,6 +5,7 @@ import { SwipeableDrawer } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import DrawerProfile from './DrawerProfile'
 import DrawerCart from './DrawerCart'
+import { connect } from 'react-redux'
 
 const styles = theme => ({
   drawer: {
@@ -51,4 +52,8 @@ ShopDrawer.propTypes = {
   classes: PropTypes.object
 }
 
-export default withRouter(withStyles(styles)(ShopDrawer))
+const mapStateToProps = state => ({
+  cartItemsCount: state.cart.items.length
+})
+
+export default connect(mapStateToProps)(withRouter(withStyles(styles)(ShopDrawer)))

@@ -8,6 +8,8 @@ import AddIcon from '@material-ui/icons/Add'
 import { withStyles } from '@material-ui/core/styles'
 import { makeUrl } from '../../services'
 import AppStyles from '../../jss/AppStyles'
+import { addToCart } from '../../redux/modules/cart'
+import { connect } from 'react-redux'
 
 const styles = theme => ({
   ...AppStyles(theme),
@@ -54,7 +56,7 @@ class ProductDetails extends React.Component {
   }
 
   render () {
-    const { onAddToCart, hasLoggedUser, classes } = this.props
+    const { addToCart, hasLoggedUser, classes } = this.props
     const { isLoading, product } = this.state
 
     const body = product
@@ -72,7 +74,7 @@ class ProductDetails extends React.Component {
 
             {
               hasLoggedUser
-                ? <Button variant='contained' color='primary' onClick={onAddToCart(product)}>
+                ? <Button variant='contained' color='primary' onClick={() => addToCart(product)}>
                     Add to Cart
                   <AddIcon />
                 </Button>
@@ -102,9 +104,13 @@ class ProductDetails extends React.Component {
 ProductDetails.propTypes = {
   hasLoggedUser: PropTypes.bool.isRequired,
   onSetAppTitle: PropTypes.func.isRequired,
-  onAddToCart: PropTypes.func.isRequired,
+  addToCart: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired
 }
 
-export default withRouter(withStyles(styles)(ProductDetails))
+const mapDispatchToProps = {
+  addToCart
+}
+
+export default connect(null, mapDispatchToProps)(withRouter(withStyles(styles)(ProductDetails)))

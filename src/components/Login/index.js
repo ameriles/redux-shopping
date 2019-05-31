@@ -1,8 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TextField, Button, Paper, Grid } from '@material-ui/core'
+import { TextField, Button, Paper, Grid, CircularProgress, Typography } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import AppStyles from '../../jss/AppStyles'
+import { login } from '../../redux/modules/login'
+import { connect } from 'react-redux'
 
 const styles = theme => ({
   ...AppStyles(theme),
@@ -39,17 +41,19 @@ class Login extends React.Component {
     })
   }
 
-  onLogin = (username, password) => (event) => {
+  onLogin = async (event) => {
     event.preventDefault()
-    // TODO: login logic
+    const { history, login } = this.props
+    const { username, password } = this.state
 
-    const { onLogged, history } = this.props
-    onLogged({ username, loggedAt: new Date() })
-    history.push('/')
+    const loginOk = await login(username, password)
+    if (loginOk) {
+      history.push('/')
+    }
   }
 
   render () {
-    const { classes } = this.props
+    const { classes, loading, errorMessage } = this.props
     const { username, password } = this.state
     return (
       <div className={classes.container}>
@@ -57,7 +61,7 @@ class Login extends React.Component {
           <Grid item xs={12} sm={10} md={6}>
             <Paper className={classes.card}>
               <form className={classes.formContainer} noValidate autoComplete='off'
-                onSubmit={this.onLogin(username, password)}>
+                onSubmit={this.onLogin}>
                 <TextField
                   label='Username'
                   required
@@ -79,8 +83,17 @@ class Login extends React.Component {
                   variant='outlined'
                 />
 
-                <Button color='primary' variant='contained' type='submit'
-                  className={classes.formField}>Login</Button>
+                {
+                  loading
+                    ? <CircularProgress />
+                    : <Button color='primary' variant='contained' type='submit'
+                      className={classes.formField}>Login</Button>
+                }
+
+                {
+                  errorMessage && <Typography variant='body1' align='center' color='error'>{errorMessage}</Typography>
+                }
+
               </form>
             </Paper>
           </Grid>
@@ -97,4 +110,13 @@ Login.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(Login)
+const mapStateToProps = state => ({
+  loading: state.login.loading,
+  errorMessage: state.login.error ? state.login.error.message : null
+})
+
+const mapDispatchToProps = {
+  login
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Login))

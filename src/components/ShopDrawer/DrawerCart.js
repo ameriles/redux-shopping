@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
 import { List, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
+import { connect } from 'react-redux'
 
 const DrawerCart = ({ cartItemsCount }) => (
   <List>
@@ -22,4 +23,8 @@ DrawerCart.propTypes = {
   cartItemsCount: PropTypes.number.isRequired
 }
 
-export default withRouter(DrawerCart)
+const mapStateToProps = state => ({
+  cartItemsCount: state.cart.items.length
+})
+
+export default connect(mapStateToProps)(withRouter(DrawerCart))

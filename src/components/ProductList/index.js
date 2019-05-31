@@ -39,13 +39,13 @@ class ProductList extends React.Component {
   }
 
   render () {
-    const { classes, onAddToCart, hasLoggedUser } = this.props
+    const { classes, hasLoggedUser } = this.props
     const { products, isLoading } = this.state
     const items = products.map(p =>
       <Grid item key={p.id} xs={12} sm={6} md={4} lg={3}>
         <ProductItem id={p.id} imageUrl={p.imageUrl} name={p.name} price={p.price} freeShipping={p.freeShipping}
           hasLoggedUser={hasLoggedUser}
-          onAddToCart={onAddToCart(p)} />
+        />
       </Grid>
     )
 
@@ -60,7 +60,6 @@ class ProductList extends React.Component {
 ProductList.propTypes = {
   onSetAppTitle: PropTypes.func.isRequired,
   hasLoggedUser: PropTypes.bool.isRequired,
-  onAddToCart: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired
 }
 

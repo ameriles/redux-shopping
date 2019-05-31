@@ -4,6 +4,7 @@ import numeral from 'numeral'
 import { Paper, Table, TableHead, TableCell, TableRow, TableBody, Typography } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import AppStyles from '../../jss/AppStyles'
+import { connect } from 'react-redux'
 
 const styles = theme => ({
   ...AppStyles(theme),
@@ -18,7 +19,7 @@ const styles = theme => ({
 })
 
 class Cart extends React.Component {
-  componentDidMount() {
+  componentDidMount () {
     this.props.onSetAppTitle('My Cart')
   }
 
@@ -81,4 +82,8 @@ Cart.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(Cart)
+const mapStateToProps = state => ({
+  cartItems: state.cart.items
+})
+
+export default connect(mapStateToProps)(withStyles(styles)(Cart))

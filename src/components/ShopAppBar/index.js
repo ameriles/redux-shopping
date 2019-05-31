@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles'
 import MenuIcon from '@material-ui/icons/Menu'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import { connect } from 'react-redux'
 
 const styles = theme => ({
   menuButton: {
@@ -67,4 +68,8 @@ ShopAppBar.propTypes = {
   classes: PropTypes.object
 }
 
-export default withRouter(withStyles(styles)(ShopAppBar))
+const mapStateToProps = state => ({
+  cartItemsCount: state.cart.items.length
+})
+
+export default connect(mapStateToProps)(withRouter(withStyles(styles)(ShopAppBar)))
